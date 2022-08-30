@@ -27,9 +27,9 @@ if [[ $# -ne 4 ]]
 then
     echo "Command line argumnents required incomplete!!!!"
     echo "Usage: To run this script, you need
-          1. The source as the first command line argument.
+          1. The source as the first command line argument: The full path of the file you are trying to copy..
 	  2. The backup location as the second command line argument e.g backup/AWSJUL2022.
-	  3. The runner as the third command line argument.
+	  3. The runner as the third command line argument i.e your name.
 	  4. The type of file to be backed up, use 'f' for a regular file and 'd' for a directory."
 exit
 fi
@@ -62,11 +62,3 @@ else
     echo "The Copy Job Was Successful"
 fi
 
-# Listing the content of backup  directory
-echo "Listing the content of ${FINAL_BK_LOC} directory"
-ls -ltr ${FINAL_BK_LOC}
-
-
-#Counting files in backup Directory
-echo "Counting files in ${FINAL_BK_LOC} directory"
-ls -ltr ${FINAL_BK_LOC} |wc -l
