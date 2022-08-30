@@ -1,0 +1,78 @@
+#!/bin/bash
+#Variable Declaration
+export PRACTISEDIR="/home/ec2-user/scripts/practisedir_tolu_jul22"  #Full path of base backup location
+export BK_LOC=$2          #Backup location
+export SOURCE=$1         #File or Directory to be backed up
+export RUNNER=$3       #Name of Runner
+export BK_TYPE=$4      #Type of Backup, either file or directory
+
+
+
+#Checking if file is a directory or a regular file
+
+if [[ $BK_TYPE == 'f' ]]
+then
+BK_TYPE="file"
+else
+BK_TYPE="directory"
+fi
+export TS=$(date +%m%d%y%H%M%S)
+export FINAL_BK_LOC=${PRACTISEDIR}/${BK_LOC}/${RUNNER}/${BK_TYPE}/${TS}
+export LOG_FILE=${PRACTISEDIR}/${BK_LOC}/${RUNNER}/${BK_TYPE}/log/${TS}
+
+
+#Creating the log directory
+mkdir -p ${LOG_FILE}
+
+echo "Starting the Backup Job at ${TS}">>${LOG_FILE}/control_script.log
+
+#Checking Variables
+
+if [[ $# -ne 4 ]]
+then
+    echo "Command line argumnents required incomplete!!!!" >>${LOG_FILE}/control_script.log
+    echo "Usage: To run this script, you need
+          1. The source as the first command line argument: The full path of the file you are trying to copy..
+	  2. The backup location as the second command line argument e.g backup/AWSJUL2022.
+	  3. The runner as the third command line argument i.e your name.
+	  4. The type of file to be backed up, use 'f' for a regular file and 'd' for a directory.">>${LOG_FILE}/control_script.log
+exit
+fi
+
+
+# Creating the backup directory
+echo "Starting the backup Job">>${LOG_FILE}/control_script.log
+if [[ -d ${FINAL_BK_LOC} ]]
+then
+    echo "Directory Exists">>${LOG_FILE}/control_script.log
+exit
+else
+    echo "Directory does not exist, creating new Directory: ${FINAL_BK_LOC}">>${LOG_FILE}/control_script.log
+    mkdir -p ${FINAL_BK_LOC}
+    #Checking the exit status of a mission critical command mkdir -p
+    if [[ $? -ne 0 ]]
+    then
+        echo "Directory Creation Failed">>${LOG_FILE}/control_script.log
+    exit
+    else
+        echo "Directory Creation Was Successful">>${LOG_FILE}/control_script.log
+    fi
+fi
+
+# Copying a file(s) into the backup  directory
+echo "Copying ${SOURCE} to ${FINAL_BK_LOC}">>${LOG_FILE}/control_script.log
+cp -r  ${SOURCE} ${FINAL_BK_LOC}
+
+#checking for exit status
+
+if [[ $? -ne 0 ]]
+then
+    echo "Copy Job Failed">>${LOG_FILE}/control_script.log
+exit
+else
+    echo "The Copy Job Was Successful">>${LOG_FILE}/control_script.log
+fi
+
+#End of Backup Job
+export TS=$(date +%m%d%y%H%M%S)
+echo "Ending the Backup Job at ${TS}">>${LOG_FILE}/control_script.log
