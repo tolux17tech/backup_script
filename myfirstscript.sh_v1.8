@@ -1,0 +1,74 @@
+#!/bin/bash
+#Variable Declaration
+export PRACTISEDIR=$1  #Full path of base backup location"
+export DIR=$2          #Backup location
+export SOURCE=$5         #File or Directory to be backed up
+export RUNNER=$3       #Name of Runner
+export BK_TYPE=$4      #Type of Backup, either file or directory
+
+
+
+#Checking if file is a directory or a regular file
+
+if [[ $BK_TYPE == 'f' ]]
+then
+BK_TYPE="file"
+else
+BK_TYPE="directory"
+fi
+export TS=$(date +%m%d%y%M%S)
+export FINAL_BK_LOC=${PRACTISEDIR}/${DIR}/${RUNNER}/${BK_TYPE}/${TS}
+
+
+echo "The first command line argument is $1"
+echo "The second command line argument is $2"
+echo "The third command liine argumment is $3"
+echo "We have $# commamnd line arguments"
+
+#Checking Variables
+
+if [[ $# -ne 5 ]]
+then
+    echo "Variables required incomplete"
+    echo "Usage: To run this script, you need
+          comm_arg1
+	  comm_arg2"
+exit
+fi
+
+
+# Creating the backup directory
+echo "Starting the backup Job"
+mkdir -p ${FINAL_BK_LOC}
+
+if [[ $? -ne 0 ]]
+then
+    echo "Directory creation failed"
+exit
+else
+    echo "Directory Creation was successful"
+fi
+
+
+# Copying a file(s) into the backup  directory
+echo "Copying ${SOURCE} to ${FINAL_BK_LOC}"
+cp -r  ${SOURCE} ${FINAL_BK_LOC}
+
+#checking for exit status
+
+if [[ $? -ne 0 ]]
+then
+    echo "Copy Job Failed"
+exit
+else
+    echo "The copy Job was successful"
+fi
+
+# Listing the content of backup  directory
+echo "Listing the content of ${DIR} directory"
+ls -ltr ${FINAL_BK_LOC}
+
+
+#Counting files in backup Directory
+echo "Counting files in ${DIR} directory"
+ls -ltr ${FINAL_BK_LOC} |wc -l

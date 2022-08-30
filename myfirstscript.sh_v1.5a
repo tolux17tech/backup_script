@@ -1,0 +1,27 @@
+#!/bin/bash
+
+export PRACTISEDIR="/home/ec2-user/scripts/practisedir_tolu_jul22"
+export DIR=$2
+export FILE=$1
+export RUNNER=$3
+export TS=$(date +%m%d%y)
+export FINAL_BK_LOC=${PRACTISEDIR}/${DIR}/${RUNNER}
+
+
+# Creating the backup directory
+echo "Starting the backup Job"
+mkdir -p ${FINAL_BK_LOC}
+
+# Copying a file(s) into the backup  directory
+echo "Copying ${FILE} to ${FINAL_BK_LOC}"
+cp  -r ${FILE} ${FINAL_BK_LOC}/${FILE}_${TS}
+#cp -r  ${FILE}.txt ${FINAL_BK_LOC}/${FILE}_${TS}.txt
+
+# Listing the content of backup  directory
+echo "Listing the content of ${DIR} directory"
+ls -ltr ${FINAL_BK_LOC}
+
+
+#Counting files in backup Directory
+echo "Counting files in ${DIR} directory"
+ls -ltr ${FINAL_BK_LOC} |wc -l

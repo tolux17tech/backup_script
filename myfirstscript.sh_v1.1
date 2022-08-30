@@ -1,0 +1,22 @@
+#!/bin/bash
+
+export PRACTISEDIR="/home/ec2-user/scripts/practisedir_tolu_jul22"
+export DIR="backup"
+export FILE="myfirstfile.txt"
+
+# Creating the backup directory
+echo "Starting the backup Job"
+mkdir ${PRACTISEDIR}/${DIR}
+
+# Copying a file(s) into the backup  directory
+echo "${PRACTISEDIR}/${FILE} to ${PRACTISEDIR}/${DIR}"
+cp ${PRACTISEDIR}/${FILE} ${PRACTISEDIR}/${DIR}
+
+# Listing the content of backup  directory
+echo "Listing the content of ${DIR} directory"
+ls -ltr ${PRACTISEDIR}/${DIR}
+
+
+#Counting files in backup Directory
+echo "Counting files in ${DIR} directory"
+ls -ltr ${PRACTISEDIR}/${DIR} |wc -l

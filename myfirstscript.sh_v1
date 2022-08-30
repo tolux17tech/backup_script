@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Creating a new directory called myfirstdir
+echo "Starting our first script run"
+mkdir /home/ec2-user/scripts/practisedir_tolu_jul22/myfirstdir
+
+# Copying myfirstfile.txt into myfirstdir directory
+echo "Copying /home/ec2-user/scripts/practisedir_tolu_jul22/myfirstfile.txt to /home/ec2-user/scripts/practisedir_tolu_jul22/myfirstdir"
+cp /home/ec2-user/scripts/practisedir_tolu_jul22/myfirstfile.txt /home/ec2-user/scripts/practisedir_tolu_jul22/myfirstdir
+
+# Listing the content of myfirstdir directory
+echo "Listing the content of myfirstdir directory"
+ls -ltr /home/ec2-user/scripts/practisedir_tolu_jul22/myfirstdir

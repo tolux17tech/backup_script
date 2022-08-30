@@ -1,0 +1,72 @@
+#!/bin/bash
+#Variable Declaration
+export PRACTISEDIR="/home/ec2-user/scripts/practisedir_tolu_jul22"  #Full path of base backup location
+export BK_LOC=$2          #Backup location
+export SOURCE=$1         #File or Directory to be backed up
+export RUNNER=$3       #Name of Runner
+export BK_TYPE=$4      #Type of Backup, either file or directory
+
+
+
+#Checking if file is a directory or a regular file
+
+if [[ $BK_TYPE == 'f' ]]
+then
+BK_TYPE="file"
+else
+BK_TYPE="directory"
+fi
+export TS=$(date +%m%d%y%M%S)
+export FINAL_BK_LOC=${PRACTISEDIR}/${BK_LOC}/${RUNNER}/${BK_TYPE}/${TS}
+
+
+
+#Checking Variables
+
+if [[ $# -ne 4 ]]
+then
+    echo "Command line argumnents required incomplete!!!!"
+    echo "Usage: To run this script, you need
+          1. The source as the first command line argument.
+	  2. The backup location as the second command line argument e.g backup/AWSJUL2022.
+	  3. The runner as the third command line argument.
+	  4. The type of file to be backed up, use 'f' for a regular file and 'd' for a directory."
+exit
+fi
+
+
+# Creating the backup directory
+echo "Starting the backup Job"
+mkdir -p ${FINAL_BK_LOC}
+
+if [[ $? -ne 0 ]]
+then
+    echo "Directory Creation Failed"
+exit
+else
+    echo "Directory Creation Was Successful"
+fi
+
+
+# Copying a file(s) into the backup  directory
+echo "Copying ${SOURCE} to ${FINAL_BK_LOC}"
+cp -r  ${SOURCE} ${FINAL_BK_LOC}
+
+#checking for exit status
+
+if [[ $? -ne 0 ]]
+then
+    echo "Copy Job Failed"
+exit
+else
+    echo "The Copy Job Was Successful"
+fi
+
+# Listing the content of backup  directory
+echo "Listing the content of ${FINAL_BK_LOC} directory"
+ls -ltr ${FINAL_BK_LOC}
+
+
+#Counting files in backup Directory
+echo "Counting files in ${FINAL_BK_LOC} directory"
+ls -ltr ${FINAL_BK_LOC} |wc -l
